@@ -94,6 +94,8 @@ public class Model extends Observable {
         setChanged();
     }
 
+
+
     /** Tilt the board toward SIDE. Return true iff this changes the board.
      *
      * 1. If two Tile objects are adjacent in the direction of motion and have
@@ -109,11 +111,38 @@ public class Model extends Observable {
     public boolean tilt(Side side) {
         boolean changed;
         changed = false;
-
-        // TODO: Modify this.board (and perhaps this.score) to account
-        // for the tilt to the Side SIDE. If the board changed, set the
-        // changed local variable to true.
-
+        board.setViewingPerspective(side);
+        int edge = this.size();
+        for(int col = 0; col < edge; col++){
+            int[] aimPos = new int[]{col,edge-1};
+            Tile preTile = null;
+            for(int row = edge-1; row >= 0; row--){
+                Tile cur = board.tile(col,row);
+                if(cur == null) continue;
+                else{
+                    if(preTile == null){
+                        board.move(aimPos[0],aimPos[1],cur);
+                        preTile = cur;
+                        if(row != aimPos[1]) changed = true;
+                    }
+                    else{
+                        if(preTile.value() == cur.value() && board.move(aimPos[0],aimPos[1],cur)){
+                            changed = true;
+                            this.score += board.tile(aimPos[0],aimPos[1]).value();
+                            preTile = null;
+                            aimPos[1] -= 1;
+                        }
+                        else{
+                            aimPos[1] -= 1;
+                            board.move(aimPos[0],aimPos[1],cur);
+                            preTile = cur;
+                            changed = true;
+                        }
+                    }
+                }
+            }
+        }
+        board.setViewingPerspective(Side.NORTH);
         checkGameOver();
         if (changed) {
             setChanged();
@@ -137,7 +166,13 @@ public class Model extends Observable {
      *  Empty spaces are stored as null.
      * */
     public static boolean emptySpaceExists(Board b) {
-        // TODO: Fill in this function.
+        int edge = b.size();
+        for(int col = 0; col < edge; col++){
+            for(int row = 0; row < edge; row++){
+                Tile cur = b.tile(col,row);
+                if( cur == null) return true;
+            }
+        }
         return false;
     }
 
@@ -147,7 +182,20 @@ public class Model extends Observable {
      * given a Tile object t, we get its value with t.value().
      */
     public static boolean maxTileExists(Board b) {
-        // TODO: Fill in this function.
+        int edge = b.size();
+        for(int col = 0; col < edge; col++){
+            for(int row = 0; row < edge; row++){
+                Tile cur = b.tile(col,row);
+                if( cur == null) continue;
+                if( cur.value() == MAX_PIECE ) return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean checkAndCompare(Tile item_1, Tile item_2, Tile item_3){
+        if(item_1 == null || item_2 == null || item_3 == null) return true;
+        if(item_1.value() == item_2.value() || item_1.value() == item_3.value()) return true;
         return false;
     }
 
@@ -158,7 +206,31 @@ public class Model extends Observable {
      * 2. There are two adjacent tiles with the same value.
      */
     public static boolean atLeastOneMoveExists(Board b) {
-        // TODO: Fill in this function.
+        if (b == null) return false;
+        int edge = b.size();
+        for(int col = 0; col < edge; col++){
+            if(col != edge-1){
+                for(int row = 0; row < edge; row++){
+                    if(row != edge-1){
+                        if(checkAndCompare(b.tile(col,row),b.tile(col+1,row),b.tile(col,row+1))) return true;
+                    }
+                    else{
+                        Tile cur = b.tile(col,row);
+                        Tile curRight = b.tile(col+1,row);
+                        if(cur == null || curRight == null) return true;
+                        if(cur.value() == curRight.value()) return true;
+                    }
+                }
+            }
+            else{
+                for(int row = 0; row < edge-1 ;row++){
+                    Tile cur = b.tile(col,row);
+                    Tile curUp = b.tile(col,row+1);
+                    if(cur == null || curUp == null) return true;
+                    if(cur.value() == curUp.value()) return true;
+                }
+            }
+        }
         return false;
     }
 
