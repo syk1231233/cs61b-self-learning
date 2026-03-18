@@ -214,9 +214,9 @@ public class LinkedListDequeTest {
         deque.addLast(20);
         deque.addLast(30);
         // 断言正常索引
-        assertEquals((Integer) 10, deque.get(0));
-        assertEquals((Integer) 20, deque.get(1));
-        assertEquals((Integer) 30, deque.get(2));
+        assertEquals((Integer) 10, deque.getRecursive(0));
+        assertEquals((Integer) 20, deque.getRecursive(1));
+        assertEquals((Integer) 30, deque.getRecursive(2));
         // 断言越界返回null
         assertNull(deque.get(3));
     }

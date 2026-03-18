@@ -176,7 +176,7 @@ public class ArrayDeque<T> implements Deque, Iterable{
         Deque<T> compareArray = (Deque) o;
         if(compareArray.size() != size) return false;
         for(int i = 0; i < size; i++){
-            if(compareArray.get(i) != this.get(i)) return false;
+            if(!(compareArray.get(i).equals(this.get(i)))) return false;
         }
         return true;
     }

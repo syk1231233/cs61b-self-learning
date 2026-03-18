@@ -71,6 +71,8 @@ public class LinkedListDeque<T> implements Deque<T>,Iterable<T>{
     public LinkedListDeque(){
         size = 0;
         sentry = new Item<>(null);
+        sentry.pre = sentry;
+        sentry.next = sentry;
     }
     /**
      * Adds an item of type T to the front of the deque.
@@ -209,8 +211,8 @@ public class LinkedListDeque<T> implements Deque<T>,Iterable<T>{
      */
     public T getRecursive(int index){
         if(index > size || index < 0) return null;
-        if(index > size - index) return getRecursiveHelp(index, sentry.next, true);
-        else return getRecursiveHelp(size - 1 - index, sentry.pre, false);
+        if(index > size - index) return getRecursiveHelp(size - 1 - index, sentry.next, true);
+        else return getRecursiveHelp(index, sentry.pre, false);
     }
 
     @Override
@@ -224,7 +226,7 @@ public class LinkedListDeque<T> implements Deque<T>,Iterable<T>{
         Deque<T> compareArray = (Deque) o;
         if(compareArray.size() != size) return false;
         for(int i = 0; i < size; i++){
-            if(compareArray.get(i) != this.get(i)) return false;
+            if(!(compareArray.get(i) .equals(this.get(i)))) return false;
         }
         return true;
     }
