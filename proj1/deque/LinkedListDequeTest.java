@@ -4,136 +4,266 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 
-/** Performs some basic linked list tests. */
+
+/**
+ * 双端队列测试类，覆盖 ArrayDeque 和 LinkedListDeque 的所有核心功能
+ * 符合 UC Berkeley CS61B proj1 测试要求
+ */
 public class LinkedListDequeTest {
 
+    // ====================== ArrayDeque 核心测试 ======================
+    /**
+     * 测试头插、头删功能
+     */
     @Test
-    /** Adds a few things to the list, checking isEmpty() and size() are correct,
-     * finally printing the results.
-     *
-     * && is the "and" operation. */
-    public void addIsEmptySizeTest() {
-
-        System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
-        /*
-        LinkedListDeque<String> lld1 = new LinkedListDeque<String>();
-
-		assertTrue("A newly initialized LLDeque should be empty", lld1.isEmpty());
-		lld1.addFirst("front");
-
-		// The && operator is the same as "and" in Python.
-		// It's a binary operator that returns true if both arguments true, and false otherwise.
-        assertEquals(1, lld1.size());
-        assertFalse("lld1 should now contain 1 item", lld1.isEmpty());
-
-		lld1.addLast("middle");
-		assertEquals(2, lld1.size());
-
-		lld1.addLast("back");
-		assertEquals(3, lld1.size());
-
-		System.out.println("Printing out deque: ");
-		lld1.printDeque();
-		*/
+    public void testArrayDequeAddFirstAndRemoveFirst() {
+        ArrayDeque<Integer> deque = new ArrayDeque<>();
+        deque.addFirst(1);
+        deque.addFirst(2);
+        deque.addFirst(3);
+        // 断言删除顺序正确
+        assertEquals((Integer) 3, deque.removeFirst());
+        assertEquals((Integer) 2, deque.removeFirst());
+        assertEquals((Integer) 1, deque.removeFirst());
+        // 断言队列空
+        assertTrue(deque.isEmpty());
     }
 
+    /**
+     * 测试尾插、尾删功能
+     */
     @Test
-    /** Adds an item, then removes an item, and ensures that dll is empty afterwards. */
-    public void addRemoveTest() {
-
-        System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
-        /*
-        LinkedListDeque<Integer> lld1 = new LinkedListDeque<Integer>();
-		// should be empty
-		assertTrue("lld1 should be empty upon initialization", lld1.isEmpty());
-
-		lld1.addFirst(10);
-		// should not be empty
-		assertFalse("lld1 should contain 1 item", lld1.isEmpty());
-
-		lld1.removeFirst();
-		// should be empty
-		assertTrue("lld1 should be empty after removal", lld1.isEmpty());
-        */
+    public void testArrayDequeAddLastAndRemoveLast() {
+        ArrayDeque<Integer> deque = new ArrayDeque<>();
+        deque.addLast(1);
+        deque.addLast(2);
+        deque.addLast(3);
+        // 断言删除顺序正确
+        assertEquals((Integer) 3, deque.removeLast());
+        assertEquals((Integer) 2, deque.removeLast());
+        assertEquals((Integer) 1, deque.removeLast());
+        // 断言队列空
+        assertTrue(deque.isEmpty());
     }
 
+    /**
+     * 测试空队列的边界操作
+     */
     @Test
-    /* Tests removing from an empty deque */
-    public void removeEmptyTest() {
-
-        System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
-        /*
-        LinkedListDeque<Integer> lld1 = new LinkedListDeque<>();
-        lld1.addFirst(3);
-
-        lld1.removeLast();
-        lld1.removeFirst();
-        lld1.removeLast();
-        lld1.removeFirst();
-
-        int size = lld1.size();
-        String errorMsg = "  Bad size returned when removing from empty deque.\n";
-        errorMsg += "  student size() returned " + size + "\n";
-        errorMsg += "  actual size() returned 0\n";
-
-        assertEquals(errorMsg, 0, size);
-        */
+    public void testArrayDequeEmptyOperations() {
+        ArrayDeque<Integer> deque = new ArrayDeque<>();
+        // 空队列删除返回null
+        assertNull(deque.removeFirst());
+        assertNull(deque.removeLast());
+        // 空队列get返回null
+        assertNull(deque.get(0));
+        // 断言size为0
+        assertEquals(0, deque.size());
+        // 断言队列空
+        assertTrue(deque.isEmpty());
     }
 
+    /**
+     * 测试单元素队列的操作
+     */
     @Test
-    /* Check if you can create LinkedListDeques with different parameterized types*/
-    public void multipleParamTest() {
-
-        /*
-        LinkedListDeque<String>  lld1 = new LinkedListDeque<String>();
-        LinkedListDeque<Double>  lld2 = new LinkedListDeque<Double>();
-        LinkedListDeque<Boolean> lld3 = new LinkedListDeque<Boolean>();
-
-        lld1.addFirst("string");
-        lld2.addFirst(3.14159);
-        lld3.addFirst(true);
-
-        String s = lld1.removeFirst();
-        double d = lld2.removeFirst();
-        boolean b = lld3.removeFirst();
-        */
+    public void testArrayDequeSingleElement() {
+        ArrayDeque<Integer> deque = new ArrayDeque<>();
+        deque.addFirst(5);
+        assertEquals((Integer) 5, deque.removeFirst());
+        deque.addLast(6);
+        assertEquals((Integer) 6, deque.removeLast());
+        assertTrue(deque.isEmpty());
     }
 
+    /**
+     * 测试动态扩容和缩容
+     */
     @Test
-    /* check if null is return when removing from an empty LinkedListDeque. */
-    public void emptyNullReturnTest() {
-
-        System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
-        /*
-        LinkedListDeque<Integer> lld1 = new LinkedListDeque<Integer>();
-
-        boolean passed1 = false;
-        boolean passed2 = false;
-        assertEquals("Should return null when removeFirst is called on an empty Deque,", null, lld1.removeFirst());
-        assertEquals("Should return null when removeLast is called on an empty Deque,", null, lld1.removeLast());
-
-        */
-    }
-
-    @Test
-    /* Add large number of elements to deque; check if order is correct. */
-    public void bigLLDequeTest() {
-
-        System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
-        /*
-        LinkedListDeque<Integer> lld1 = new LinkedListDeque<Integer>();
-        for (int i = 0; i < 1000000; i++) {
-            lld1.addLast(i);
+    public void testArrayDequeResize() {
+        ArrayDeque<Integer> deque = new ArrayDeque<>();
+        // 初始容量8，添加9个元素触发扩容
+        for (int i = 0; i < 9; i++) {
+            deque.addLast(i);
         }
-
-        for (double i = 0; i < 500000; i++) {
-            assertEquals("Should have the same value", i, (double) lld1.removeFirst(), 0.0);
+        // 断言扩容后size正确
+        assertEquals(9, deque.size());
+        // 断言扩容后元素顺序正确
+        for (int i = 0; i < 9; i++) {
+            assertEquals((Integer) i, deque.get(i));
         }
-
-        for (double i = 999999; i > 500000; i--) {
-            assertEquals("Should have the same value", i, (double) lld1.removeLast(), 0.0);
+        // 删除到2个元素，触发缩容
+        for (int i = 0; i < 7; i++) {
+            deque.removeFirst();
         }
+        // 断言缩容后size正确
+        assertEquals(2, deque.size());
+        // 断言缩容后元素正确
+        assertEquals((Integer) 7, deque.get(0));
+        assertEquals((Integer) 8, deque.get(1));
+    }
 
-        */
+    /**
+     * 测试get方法
+     */
+    @Test
+    public void testArrayDequeGet() {
+        ArrayDeque<Integer> deque = new ArrayDeque<>();
+        deque.addLast(10);
+        deque.addLast(20);
+        deque.addLast(30);
+        // 断言正常索引
+        assertEquals((Integer) 10, deque.get(0));
+        assertEquals((Integer) 20, deque.get(1));
+        assertEquals((Integer) 30, deque.get(2));
+        // 断言越界返回null
+        assertNull(deque.get(3));
+    }
+
+    /**
+     * 测试迭代器功能
+     */
+    @Test
+    public void testArrayDequeIterator() {
+        ArrayDeque<Integer> deque = new ArrayDeque<>();
+        deque.addLast(1);
+        deque.addLast(2);
+        deque.addLast(3);
+        int count = 0;
+        // 增强for循环遍历
+        for (Object num : deque) {
+            assertEquals((Integer) (count + 1), (Integer) num);
+            count++;
+        }
+        // 断言遍历次数正确
+        assertEquals(3, count);
+    }
+
+    // ====================== LinkedListDeque 核心测试 ======================
+    /**
+     * 测试头插、头删功能
+     */
+    @Test
+    public void testLinkedListDequeAddFirstAndRemoveFirst() {
+        LinkedListDeque<Integer> deque = new LinkedListDeque<>();
+        deque.addFirst(1);
+        deque.addFirst(2);
+        deque.addFirst(3);
+        // 断言删除顺序正确
+        assertEquals((Integer) 3, deque.removeFirst());
+        assertEquals((Integer) 2, deque.removeFirst());
+        assertEquals((Integer) 1, deque.removeFirst());
+        // 断言队列空
+        assertTrue(deque.isEmpty());
+    }
+
+    /**
+     * 测试尾插、尾删功能
+     */
+    @Test
+    public void testLinkedListDequeAddLastAndRemoveLast() {
+        LinkedListDeque<Integer> deque = new LinkedListDeque<>();
+        deque.addLast(1);
+        deque.addLast(2);
+        deque.addLast(3);
+        // 断言删除顺序正确
+        assertEquals((Integer) 3, deque.removeLast());
+        assertEquals((Integer) 2, deque.removeLast());
+        assertEquals((Integer) 1, deque.removeLast());
+        // 断言队列空
+        assertTrue(deque.isEmpty());
+    }
+
+    /**
+     * 测试空队列的边界操作
+     */
+    @Test
+    public void testLinkedListDequeEmptyOperations() {
+        LinkedListDeque<Integer> deque = new LinkedListDeque<>();
+        // 空队列删除返回null
+        assertNull(deque.removeFirst());
+        assertNull(deque.removeLast());
+        // 空队列get返回null
+        assertNull(deque.get(0));
+        // 断言size为0
+        assertEquals(0, deque.size());
+        // 断言队列空
+        assertTrue(deque.isEmpty());
+    }
+
+    /**
+     * 测试单元素队列的操作
+     */
+    @Test
+    public void testLinkedListDequeSingleElement() {
+        LinkedListDeque<Integer> deque = new LinkedListDeque<>();
+        deque.addFirst(5);
+        assertEquals((Integer) 5, deque.removeFirst());
+        deque.addLast(6);
+        assertEquals((Integer) 6, deque.removeLast());
+        assertTrue(deque.isEmpty());
+    }
+
+    /**
+     * 测试get方法
+     */
+    @Test
+    public void testLinkedListDequeGet() {
+        LinkedListDeque<Integer> deque = new LinkedListDeque<>();
+        deque.addLast(10);
+        deque.addLast(20);
+        deque.addLast(30);
+        // 断言正常索引
+        assertEquals((Integer) 10, deque.get(0));
+        assertEquals((Integer) 20, deque.get(1));
+        assertEquals((Integer) 30, deque.get(2));
+        // 断言越界返回null
+        assertNull(deque.get(3));
+    }
+
+    /**
+     * 测试迭代器功能
+     */
+    @Test
+    public void testLinkedListDequeIterator() {
+        LinkedListDeque<Integer> deque = new LinkedListDeque<>();
+        deque.addLast(1);
+        deque.addLast(2);
+        deque.addLast(3);
+        int count = 0;
+        // 增强for循环遍历
+        for (int num : deque) {
+            assertEquals((Integer) (count + 1), (Integer) num);
+            count++;
+        }
+        // 断言遍历次数正确
+        assertEquals(3, count);
+    }
+
+    // ====================== 对比测试（两种队列功能一致性） ======================
+    /**
+     * 测试ArrayDeque和LinkedListDeque功能完全一致
+     */
+    @Test
+    public void testDequeFunctionComparison() {
+        ArrayDeque<Integer> arrayDeque = new ArrayDeque<>();
+        LinkedListDeque<Integer> linkedDeque = new LinkedListDeque<>();
+
+        // 执行相同操作
+        arrayDeque.addFirst(1);
+        linkedDeque.addFirst(1);
+        arrayDeque.addLast(2);
+        linkedDeque.addLast(2);
+        arrayDeque.addFirst(3);
+        linkedDeque.addFirst(3);
+
+        // 断言删除结果一致
+        assertEquals(arrayDeque.removeFirst(), linkedDeque.removeFirst());
+        assertEquals(arrayDeque.removeLast(), linkedDeque.removeLast());
+        assertEquals(arrayDeque.removeFirst(), linkedDeque.removeFirst());
+
+        // 断言最终状态一致
+        assertTrue(arrayDeque.isEmpty());
+        assertTrue(linkedDeque.isEmpty());
     }
 }
