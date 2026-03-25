@@ -17,4 +17,7 @@ class GitletException extends RuntimeException {
         super(msg);
     }
 
+    GitletException(String msg, Throwable cause){
+        super(msg,cause);
+    }
 }

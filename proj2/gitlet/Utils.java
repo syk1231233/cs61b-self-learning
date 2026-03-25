@@ -14,9 +14,13 @@ import java.nio.file.Paths;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Formatter;
 import java.util.List;
+import java.util.Locale;
 
 
 /** Assorted utilities.
@@ -235,5 +239,12 @@ class Utils {
     static void message(String msg, Object... args) {
         System.out.printf(msg, args);
         System.out.println();
+    }
+
+    static String getTimestamp(Commit commit) {
+        DateTimeFormatter formatter = DateTimeFormatter
+                .ofPattern("EEE MMM dd HH:mm:ss yyyy", Locale.ENGLISH)
+                .withZone(ZoneId.systemDefault());
+        return formatter.format(Instant.ofEpochMilli(commit.getTimestamp()));
     }
 }
