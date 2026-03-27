@@ -13,7 +13,7 @@ import java.util.*;
  */
 public class MyHashMap<K, V> implements Map61B<K, V> {
 
-    public int getIndex(K key){
+    private int getIndex(K key){
         return (key.hashCode() & 0x7fffffff) % M;
     }
     /**
@@ -170,7 +170,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     /* Instance Variables */
     private static final int INITIALSIZE = 16;
     private double LOADFACTOR = 0.75;
-    HashSet<K> keySet = new HashSet<>();
+    private HashSet<K> keySet = new HashSet<>();
     private int M = INITIALSIZE;
     private int N = 0;
     private Collection<Node>[] buckets;
